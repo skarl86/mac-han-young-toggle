@@ -21,10 +21,51 @@ open ~/.config/keyboard-remap/KeyboardRemap.app
 
 ## 빠른 설치 (Claude Code 자동)
 
-새 맥북에 설치할 때, Claude Code 새 세션을 열고 아래 프롬프트를 통째로 복사해서 붙여넣으세요.
+새 맥북에 설치할 때, Claude Code 새 세션을 열고 **둘 중 하나의 프롬프트**를 통째로 복사해서 붙여넣으세요.
+
+| 옵션 | 빌드 | 필요 도구 | 추천 상황 |
+|---|---|---|---|
+| **A. Pre-built 다운로드** | ❌ 없음 | 없음 | 빠르게 설치만 하고 싶을 때 |
+| **B. 클론 + 빌드** | ✅ 로컬 빌드 | Xcode CLT | 소스 보거나 수정할 일이 있을 때 |
+
+### 옵션 A — Pre-built .app 다운로드 (가장 빠름)
+
+GitHub Release에 첨부된 Universal Binary를 받아 압축만 풀면 끝. macOS 13+, Apple Silicon/Intel 모두 동작.
 
 ````
-macOS 메뉴바 앱을 설치해서 동작시켜줘.
+macOS 메뉴바 앱을 GitHub Releases에서 받아서 설치해줘.
+
+레포: https://github.com/skarl86/mac-han-young-toggle
+설치 경로: ~/.config/keyboard-remap
+
+이 앱은 오른쪽 Command 키를 한/영 전환 키로 매핑해 (Karabiner 대체).
+빌드 도구 설치 없이, Pre-built Universal Binary를 GitHub Release에서 받아 사용.
+
+진행 순서:
+1. mkdir -p ~/.config/keyboard-remap
+2. gh release download --repo skarl86/mac-han-young-toggle --pattern "KeyboardRemap.app.zip" --dir ~/.config/keyboard-remap
+   (gh CLI 없으면 curl로 https://github.com/skarl86/mac-han-young-toggle/releases/latest/download/KeyboardRemap.app.zip 다운로드)
+3. cd ~/.config/keyboard-remap && ditto -x -k KeyboardRemap.app.zip . && rm KeyboardRemap.app.zip
+4. xattr -dr com.apple.quarantine ~/.config/keyboard-remap/KeyboardRemap.app
+5. open ~/.config/keyboard-remap/KeyboardRemap.app 으로 실행
+6. pgrep -lf KeyboardRemap 으로 동작 확인
+7. hidutil property --get UserKeyMapping 로 매핑 적용 확인 (30064771303 → 30064771181 보이면 성공)
+8. open "x-apple.systempreferences:com.apple.Keyboard-Settings.extension" 로 시스템 설정 키보드 페이지 열기
+
+진행 후 내가 직접 해야 할 작업을 명확히 안내해줘:
+A. "키보드 단축키" 버튼 > 사이드바 "입력 소스" > "이전 입력 소스 선택" 의 단축키 영역 더블클릭 → 오른쪽 Command 키 누르기 (F18로 인식됨) → 완료
+B. 시스템 설정 > 일반 > 로그인 항목 및 확장 프로그램에 ~/.config/keyboard-remap/KeyboardRemap.app 추가
+
+전제 조건: 한국어 2벌식 입력 소스가 등록되어 있어야 함.
+defaults read com.apple.HIToolbox AppleEnabledInputSources 로 확인하고, 없으면 시스템 설정 > 키보드 > 텍스트 입력 > 입력 소스 > 편집에서 추가하라고 안내해줘.
+````
+
+### 옵션 B — 클론 + 빌드 (소스 수정 가능)
+
+Xcode Command Line Tools 가 필요하지만, 소스를 직접 빌드해서 항상 로컬 환경에 맞춰진 바이너리를 얻음. 이후 코드 수정/커밋 가능.
+
+````
+macOS 메뉴바 앱을 소스 빌드해서 설치해줘.
 
 레포: https://github.com/skarl86/mac-han-young-toggle
 설치 경로: ~/.config/keyboard-remap
