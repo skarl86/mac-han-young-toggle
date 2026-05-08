@@ -5,6 +5,20 @@ Karabiner 같은 외부 앱 의존 없이 macOS 내장 `hidutil` 만 사용.
 
 > **Why**: 윈도우에서 오른쪽 Alt를 한/영으로 쓰는 사용자가 macOS에서도 같은 위치(오른쪽 Command)를 쓰고 싶을 때.
 
+## 빠른 설치 — Pre-built .app 다운로드
+
+빌드 없이 바로 쓰고 싶으면 [Releases 페이지](https://github.com/skarl86/mac-han-young-toggle/releases) 에서 `KeyboardRemap.app.zip` 다운로드.
+
+```bash
+# 다운로드 후 압축 해제 + 권장 경로로 이동
+unzip ~/Downloads/KeyboardRemap.app.zip -d ~/.config/keyboard-remap/
+xattr -dr com.apple.quarantine ~/.config/keyboard-remap/KeyboardRemap.app  # Gatekeeper 경고 제거 (필요 시)
+open ~/.config/keyboard-remap/KeyboardRemap.app
+```
+
+> Universal Binary (arm64 + x86_64) — Apple Silicon / Intel 맥 모두 동작.
+> 빌드 후 [시스템 설정 단축키 바인딩](#2-시스템-설정에서-단축키-바인딩-1회) 단계는 동일하게 진행해야 함.
+
 ## 빠른 설치 (Claude Code 자동)
 
 새 맥북에 설치할 때, Claude Code 새 세션을 열고 아래 프롬프트를 통째로 복사해서 붙여넣으세요.
@@ -51,11 +65,13 @@ HID Usage Code 단위 키 리매핑:
 ```bash
 git clone https://github.com/skarl86/mac-han-young-toggle.git ~/.config/keyboard-remap
 cd ~/.config/keyboard-remap
-./build.sh
+./build.sh                # 현재 머신 아키텍처 전용 빌드 (arm64 또는 x86_64)
+# ./build-universal.sh    # 또는 universal binary (arm64 + x86_64) — 배포용
 open KeyboardRemap.app
 ```
 
 > 다른 경로에 클론해도 동작합니다. `~/.config/keyboard-remap`는 권장 경로일 뿐.
+> 빌드 deployment target은 macOS 13 (Ventura) — 그 이상 버전 모두 지원.
 
 ### 2. 시스템 설정에서 단축키 바인딩 (1회)
 
