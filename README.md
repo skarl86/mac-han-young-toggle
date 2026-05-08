@@ -5,6 +5,33 @@ Karabiner 같은 외부 앱 의존 없이 macOS 내장 `hidutil` 만 사용.
 
 > **Why**: 윈도우에서 오른쪽 Alt를 한/영으로 쓰는 사용자가 macOS에서도 같은 위치(오른쪽 Command)를 쓰고 싶을 때.
 
+## 빠른 설치 (Claude Code 자동)
+
+새 맥북에 설치할 때, Claude Code 새 세션을 열고 아래 프롬프트를 통째로 복사해서 붙여넣으세요.
+
+````
+macOS 메뉴바 앱을 설치해서 동작시켜줘.
+
+레포: https://github.com/skarl86/mac-han-young-toggle
+설치 경로: ~/.config/keyboard-remap
+
+이 앱은 오른쪽 Command 키를 한/영 전환 키로 매핑해 (Karabiner 대체).
+
+진행 순서:
+1. 레포를 ~/.config/keyboard-remap 으로 git clone
+2. cd 후 ./build.sh 실행해서 빌드 (Xcode Command Line Tools 필요 — 없으면 설치 안내해줘)
+3. open KeyboardRemap.app 으로 실행하고 pgrep -lf KeyboardRemap 으로 동작 확인
+4. hidutil property --get UserKeyMapping 으로 매핑 적용 확인 (30064771303 → 30064771181 보이면 성공)
+5. open "x-apple.systempreferences:com.apple.Keyboard-Settings.extension" 으로 시스템 설정 키보드 페이지 열기
+
+진행 후 내가 직접 해야 할 작업을 명확히 안내해줘:
+A. "키보드 단축키" 버튼 > 사이드바 "입력 소스" > "이전 입력 소스 선택" 의 단축키 영역 더블클릭 → 오른쪽 Command 키 누르기 (F18로 인식됨) → 완료
+B. 시스템 설정 > 일반 > 로그인 항목 및 확장 프로그램에 ~/.config/keyboard-remap/KeyboardRemap.app 추가
+
+전제 조건: 한국어 2벌식 입력 소스가 등록되어 있어야 함.
+defaults read com.apple.HIToolbox AppleEnabledInputSources 로 확인하고, 없으면 시스템 설정 > 키보드 > 텍스트 입력 > 입력 소스 > 편집에서 추가하라고 안내해줘.
+````
+
 ## 동작 원리
 
 HID Usage Code 단위 키 리매핑:
