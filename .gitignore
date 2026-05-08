@@ -1,0 +1,16 @@
+# Build artifacts
+KeyboardRemap.app/
+*.app/
+
+# macOS
+.DS_Store
+
+# Swift
+.build/
+.swiftpm/
+Package.resolved
+
+# Editor
+.vscode/
+.idea/
+*.swp
